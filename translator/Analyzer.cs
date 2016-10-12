@@ -35,7 +35,7 @@ namespace translator
             }
         }
 
-        public string[] AnalizeSource(string source, bool distinct = true)
+        public string[] AnalizeSource(string source, bool distinct = false)
         {
             //for (int i = 0; i < source.Length; i++)
             //{
