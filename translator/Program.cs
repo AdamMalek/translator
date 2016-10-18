@@ -12,6 +12,7 @@ namespace translator
     {
         static void Main(string[] args)
         {
+            var consoleColor = Console.ForegroundColor;
             //if (args.Length < 1)
             //{
             //    Console.WriteLine("usage: tr.exe [source_file_path]");
@@ -34,6 +35,7 @@ namespace translator
                 symbols = lexer.AnalizeSource(src);
                 analyzer = new Analyzer(lexer);
                 analyzer.Analyze();
+                Console.WriteLine();
                 Console.WriteLine("Success");
                 Console.WriteLine("-----------------------");
             }
@@ -46,6 +48,7 @@ namespace translator
                 //        Console.WriteLine(DisplaySymbol(symbol));
                 //    }
                 //}
+                Console.ForegroundColor = consoleColor;
                 Console.WriteLine();
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
@@ -119,6 +122,7 @@ namespace translator
             Console.ForegroundColor = consoleColor;
             if (pos < code.Length - 1)
                 Console.WriteLine(code.Substring(pos + 1, firstenter - pos - 1));
+            Console.WriteLine();
         }
     }
 }
