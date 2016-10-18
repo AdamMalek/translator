@@ -26,7 +26,7 @@ namespace translator
                 var index = Symbols.IndexOf(current) + 1;
                 if (index == Symbols.Count)
                 {
-                    return new Symbol { Type = SymbolType.EOF, Position = -1, SymbolString="EOF"};
+                    return new Symbol { Type = SymbolType.EOF, Position= index, SymbolString="EOF"};
                 }
                 else
                 {

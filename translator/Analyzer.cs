@@ -23,6 +23,11 @@ namespace translator
             W();
             return true;
         }
+        private void S()
+        {
+            W();
+            AcceptCharacter(SymbolType.EOF);
+        }
         private void W()
         {
             if (_currentSymbol.Type == SymbolType.LeftBracket)
@@ -30,12 +35,15 @@ namespace translator
                 AcceptCharacter(SymbolType.LeftBracket);
                 X();
                 AcceptCharacter(SymbolType.RightBracket);
-                AcceptCharacter(SymbolType.EOF);
             }
             else
             {
                 X();
-                AcceptCharacter(SymbolType.EOF);
+            }
+            if (_currentSymbol.Type == SymbolType.MathSymbol)
+            {
+                AcceptCharacter(SymbolType.MathSymbol);
+                W();
             }
         }
         private void X()
