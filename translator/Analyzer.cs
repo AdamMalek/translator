@@ -23,28 +23,10 @@ namespace translator
             W();
             return true;
         }
-        private void S()
-        {
-            W();
-            AcceptCharacter(SymbolType.EOF);
-        }
         private void W()
         {
-            if (_currentSymbol.Type == SymbolType.LeftBracket)
-            {
-                AcceptCharacter(SymbolType.LeftBracket);
-                X();
-                AcceptCharacter(SymbolType.RightBracket);
-            }
-            else
-            {
-                X();
-            }
-            if (_currentSymbol.Type == SymbolType.MathSymbol)
-            {
-                AcceptCharacter(SymbolType.MathSymbol);
-                W();
-            }
+            X();
+            AcceptCharacter(SymbolType.EOF);
         }
         private void X()
         {
