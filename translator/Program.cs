@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using translator.Models;
 
 namespace translator
 {
@@ -24,7 +25,7 @@ namespace translator
             string src = File.ReadAllText(path);
             src = src.Replace("\r", "");
             Analyzer analizer = new Analyzer();
-            string[] symbols = new string[] { };
+            Symbol[] symbols = new Symbol[] { };
             Console.WriteLine("Result:");
             Console.WriteLine("-----------------------");
             try
@@ -33,6 +34,10 @@ namespace translator
             }
             catch (InvalidSyntaxException e)
             {
+                foreach (var symbol in e.Symbols)
+                {
+                    Console.WriteLine(DisplaySymbol(symbol));
+                }
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
                 GetFaultFragment(e.Position, src);
@@ -40,9 +45,34 @@ namespace translator
 
             foreach (var symbol in symbols)
             {
-                Console.WriteLine(symbol);
+                Console.WriteLine(DisplaySymbol(symbol));
             }
             Console.ReadLine();
+        }
+
+        private static string DisplaySymbol(Symbol symbol)
+        {
+            switch (symbol.Type)
+            {
+                case SymbolType.Variable:
+                    return "variable: " + symbol.Displayname;
+                case SymbolType.Integer:
+                    return "int: " + symbol.Displayname;
+                case SymbolType.Float:
+                    return "float: " + symbol.Displayname;
+                case SymbolType.MathSymbol:
+                    return "math symbol: " + symbol.Displayname;
+                case SymbolType.LeftBracket:
+                    return "left bracket: " + symbol.Displayname;
+                case SymbolType.RightBracket:
+                    return "right bracket: " + symbol.Displayname;
+                case SymbolType.Whitespace:
+                    return "variwhitespace: " + symbol.Displayname;
+                case SymbolType.Unknown:
+                    return "unknown: " + symbol.Displayname;
+                default:
+                    return "";
+            }
         }
 
         static void GetFaultFragment(int pos, string code)

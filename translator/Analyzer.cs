@@ -35,7 +35,7 @@ namespace translator
             }
         }
 
-        public string[] AnalizeSource(string source, bool distinct = false)
+        public Symbol[] AnalizeSource(string source, bool distinct = false)
         {
             //for (int i = 0; i < source.Length; i++)
             //{
@@ -56,7 +56,7 @@ namespace translator
             {
                 analyzeSegment(source, distinct);
             }
-            return Symbols.Select(x => x.Displayname).ToArray();
+            return Symbols.ToArray();
         }
         private void analyzeSegment(string segment, bool distinct)
         {
@@ -71,7 +71,7 @@ namespace translator
                 switch (currentType)
                 {
                     case CharacterType.RightBracket:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar);
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol(")", i, SymbolType.RightBracket, distinct);
@@ -79,7 +79,7 @@ namespace translator
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.LeftBracket:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar);
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol("(", i, SymbolType.LeftBracket, distinct);
@@ -87,14 +87,14 @@ namespace translator
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.Whitespace:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar);
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         pastChar = ""; pastCharType = CharacterType.Empty;
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.MathSymbol:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar);
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol(currentChar, i, SymbolType.MathSymbol, distinct);
@@ -108,9 +108,13 @@ namespace translator
                             symbol += currentChar; symbolType = SymbolType.Variable;
                             pastChar = currentChar; pastCharType = currentType;
                         }
-                        else
+                        else if (symbolType == SymbolType.Integer || symbolType == SymbolType.Float)
                         {
-                            throw new InvalidSyntaxException(i, currentChar);
+                            if (pastCharType == CharacterType.Separator)
+                                throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                            AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
+                            symbol = currentChar; symbolType = SymbolType.Variable;
+                            pastChar = currentChar; pastCharType = currentType;
                         }
                         break;
                     case CharacterType.Digit:
@@ -126,7 +130,7 @@ namespace translator
                             symbol += currentChar;
                             pastChar = currentChar; pastCharType = currentType;
                         }
-                        else throw new InvalidSyntaxException(i, currentChar);
+                        else throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         break;
                     case CharacterType.Separator:
                         if (symbolType == SymbolType.Integer)
@@ -134,13 +138,18 @@ namespace translator
                             symbol += currentChar; symbolType = SymbolType.Float;
                             pastChar = currentChar; pastCharType = currentType;
                         }
+                        else if (symbolType == SymbolType.Variable)
+                        {
+                            AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
+                            throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                        }
                         else
                         {
-                            throw new InvalidSyntaxException(i, currentChar);
+                            throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         }
                         break;
                     default:
-                        throw new InvalidSyntaxException(i, currentChar);
+                        throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                 }
             }
             if (symbolType != SymbolType.Empty)
@@ -150,7 +159,7 @@ namespace translator
         Regex letter = new Regex("[a-zA-Z]");
         Regex digit = new Regex(@"\d");
         Regex mathSymbol = new Regex(@"[+\-*/]");
-        Regex separator = new Regex(@"[,.]");
+        Regex separator = new Regex(@"[.]");
         private string source;
 
         private CharacterType getSymbolType(string character)
