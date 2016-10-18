@@ -37,6 +37,9 @@ namespace translator.Models
     }
     public enum SymbolType
     {
+        EOF,
+        Data,
+        Number,
         Empty,
         Variable,
         Integer,

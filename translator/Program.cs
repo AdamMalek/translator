@@ -24,29 +24,38 @@ namespace translator
 
             string src = File.ReadAllText(path);
             src = src.Replace("\r", "");
-            Analyzer analizer = new Analyzer();
+            Lexer lexer = new Lexer();
+            Analyzer analyzer;
             Symbol[] symbols = new Symbol[] { };
             Console.WriteLine("Result:");
             Console.WriteLine("-----------------------");
             try
             {
-                symbols = analizer.AnalizeSource(src);
+                symbols = lexer.AnalizeSource(src);
+                analyzer = new Analyzer(lexer);
+                analyzer.Analyze();
+                Console.WriteLine("Success");
+                Console.WriteLine("-----------------------");
             }
             catch (InvalidSyntaxException e)
             {
-                foreach (var symbol in e.Symbols)
-                {
-                    Console.WriteLine(DisplaySymbol(symbol));
-                }
+                //if (e.Symbols != null)
+                //{
+                //    foreach (var symbol in e.Symbols)
+                //    {
+                //        Console.WriteLine(DisplaySymbol(symbol));
+                //    }
+                //}
+                Console.WriteLine();
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
                 GetFaultFragment(e.Position, src);
             }
-
             foreach (var symbol in symbols)
             {
                 Console.WriteLine(DisplaySymbol(symbol));
             }
+
             Console.ReadLine();
         }
 
@@ -71,7 +80,7 @@ namespace translator
                 case SymbolType.Unknown:
                     return "unknown: " + symbol.Displayname;
                 default:
-                    return "";
+                    return symbol.Displayname;
             }
         }
 
@@ -93,9 +102,9 @@ namespace translator
             }
             catch (Exception)
             {
-                firstenter = code.Length-1;
+                firstenter = code.Length - 1;
             }
-            Console.Write(code.Substring(lastenter+1, pos - lastenter-1));
+            Console.Write(code.Substring(lastenter + 1, pos - lastenter - 1));
             var consoleColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
             var character = code.ElementAt(pos);
@@ -108,8 +117,8 @@ namespace translator
                 Console.Write(character);
             }
             Console.ForegroundColor = consoleColor;
-            if (pos < code.Length -1)
-            Console.WriteLine(code.Substring(pos + 1, firstenter - pos-1));
+            if (pos < code.Length - 1)
+                Console.WriteLine(code.Substring(pos + 1, firstenter - pos - 1));
         }
     }
 }
