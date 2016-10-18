@@ -23,11 +23,22 @@ namespace translator
             W();
             return true;
         }
+
+        // osobna funkcja, zeby obsluzyc EOF
         private void W()
         {
             X();
             AcceptCharacter(SymbolType.EOF);
         }
+        /*
+            X -> (X)
+            X -> (X) + X
+            X -> d + X
+            X -> d
+            
+            d-> dane (liczba int, float lub zmienna)
+            + -> operacja matematyczna [+-/*] 
+        */
         private void X()
         {
             if (_currentSymbol.Type == SymbolType.LeftBracket)
