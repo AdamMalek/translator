@@ -41,18 +41,18 @@ namespace translator
             }
             catch (InvalidSyntaxException e)
             {
-                //if (e.Symbols != null)
-                //{
-                //    foreach (var symbol in e.Symbols)
-                //    {
-                //        Console.WriteLine(DisplaySymbol(symbol));
-                //    }
-                //}
                 Console.ForegroundColor = consoleColor;
                 Console.WriteLine();
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
                 GetFaultFragment(e.Position, src);
+                if (e.Symbols != null)
+                {
+                    foreach (var symbol in e.Symbols)
+                    {
+                        Console.WriteLine(DisplaySymbol(symbol));
+                    }
+                }
             }
             foreach (var symbol in symbols)
             {
@@ -79,7 +79,7 @@ namespace translator
                 case SymbolType.RightBracket:
                     return "right bracket: " + symbol.Displayname;
                 case SymbolType.Whitespace:
-                    return "variwhitespace: " + symbol.Displayname;
+                    return "whitespace: " + symbol.Displayname;
                 case SymbolType.Unknown:
                     return "unknown: " + symbol.Displayname;
                 default:
@@ -105,7 +105,7 @@ namespace translator
             }
             catch (Exception)
             {
-                firstenter = code.Length - 1;
+                firstenter = code.Length;
             }
             Console.Write(code.Substring(lastenter + 1, pos - lastenter - 1));
             var consoleColor = Console.ForegroundColor;

@@ -71,7 +71,7 @@ namespace translator
         void AcceptCharacter(SymbolType expectedType)
         {
             Console.ForegroundColor = colors[((r>0)? r:0) % colors.Length];
-            if (_currentSymbol.Type == expectedType)
+            if (getType(_currentSymbol.Type) == expectedType)
             {
                 for (int i = 0; i < r; i++)
                 {
@@ -92,6 +92,11 @@ namespace translator
                 Console.ForegroundColor = consoleColor;
                 throw new InvalidSyntaxException(_currentSymbol.Position, _currentSymbol.SymbolString, null);
             }
+        }
+
+        public SymbolType getType(SymbolType s)
+        {
+            return (s == SymbolType.Integer || s == SymbolType.Float || s == SymbolType.Variable) ? SymbolType.Data : s;
         }
     }
 }

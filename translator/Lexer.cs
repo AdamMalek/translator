@@ -31,22 +31,17 @@ namespace translator
                 else
                 {
                     current = Symbols.ElementAt(index);
-                    current.Type = getType(current);
                     return current;
                 }
             }
             else
             {
                 current = Symbols.First();
-                current.Type = getType(current);
                 return current;
             }
         }
 
-        public SymbolType getType(Symbol s)
-        {
-            return (s.Type == SymbolType.Integer || s.Type == SymbolType.Float || s.Type == SymbolType.Variable) ? SymbolType.Data : s.Type;
-        }
+
 
         public Symbol[] AnalizeSource(string source, bool distinct = false)
         {
