@@ -1,7 +1,0 @@
-C:\Users\Adam\Desktop\translator\translator\bin\Debug\translator.exe.config
-C:\Users\Adam\Desktop\translator\translator\bin\Debug\source.src
-C:\Users\Adam\Desktop\translator\translator\bin\Debug\translator.exe
-C:\Users\Adam\Desktop\translator\translator\bin\Debug\translator.pdb
-C:\Users\Adam\Desktop\translator\translator\obj\Debug\translator.csprojResolveAssemblyReference.cache
-C:\Users\Adam\Desktop\translator\translator\obj\Debug\translator.exe
-C:\Users\Adam\Desktop\translator\translator\obj\Debug\translator.pdb
