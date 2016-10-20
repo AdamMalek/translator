@@ -71,8 +71,6 @@ namespace translator
                 Sprim();
             }
         }
-
-
         private void C()
         {
             if (_currentSymbol.Type == SymbolType.LeftBracket)

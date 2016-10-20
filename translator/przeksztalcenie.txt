@@ -1,0 +1,32 @@
+﻿1. Początkowa gramatyka:
+
+	W -> W + S			S -> S * C			C -> liczba
+	W -> W - S			S -> S / C			C -> id
+	W -> S				S -> C				C -> (W)
+
+	Moje uproszczenia:
+		* d -> liczba lub id
+		* (+) -> + lub -
+		* (*) -> * lub /
+
+	Po uproszczeniach:
+
+	W -> W (+) S		S -> S (*) C		C -> d
+	W -> S			S -> C			C -> (W)
+
+2. Eliminacja lewostronnej rekurencji:
+
+	Dodatkowe nieterminale:
+	
+	alfa -> (+) S
+	beta -> (*) C
+	
+	Przekształcam W i S zgodnie ze wzorem:
+	A -> A x			A  -> y A'
+	A -> y		<=>		A' -> x A'
+					A' -> epsilon
+	co mi daje:
+	
+	W -> S W'		S -> C S'		C -> d
+	W' -> alfa W'		S' -> beta S'		C -> (W)
+	W' -> epsilon		S' -> epsilon
