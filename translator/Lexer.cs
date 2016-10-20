@@ -89,7 +89,7 @@ namespace translator
                         if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
-                        AddSymbol(currentChar, i, SymbolType.MathSymbol, distinct);
+                        AddSymbol(currentChar, i,(currentChar=="+"||currentChar=="-") ? SymbolType.AddSubtract : SymbolType.MultiplyDivide, distinct);
                         pastChar = ""; pastCharType = CharacterType.Empty;
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;

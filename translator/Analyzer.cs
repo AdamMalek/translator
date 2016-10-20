@@ -22,6 +22,7 @@ namespace translator
         {
             var consoleColor = Console.ForegroundColor;
             W();
+            AcceptCharacter(SymbolType.EOF);
             Console.ForegroundColor = consoleColor;
             return true;
         }
@@ -31,43 +32,61 @@ namespace translator
         // osobna funkcja, zeby obsluzyc EOF
         private void W()
         {
-            X();
-            AcceptCharacter(SymbolType.EOF);
+            r++; // do wcięć w wyświetlaniu
+
+            S();
+            Wprim();
+
+            r--;
         }
-        /*
-            X -> (X)
-            X -> (X) + X
-            X -> d + X
-            X -> d
-            
-            d-> dane (liczba int, float lub zmienna)
-            + -> operacja matematyczna [+-/*] 
-        */
-        private void X()
+
+        private void alfa()
         {
-            r++;
+            AcceptCharacter(SymbolType.AddSubtract);
+            S();
+        }
+        private void Wprim()
+        {
+            if (_currentSymbol.Type == SymbolType.AddSubtract)
+            {
+                alfa();
+                Wprim();
+            }
+        }
+        private void S()
+        {
+            C();
+            Sprim();
+        }
+        private void beta()
+        {
+            AcceptCharacter(SymbolType.MultiplyDivide);
+            C();
+        }
+        private void Sprim()
+        {
+            if (_currentSymbol.Type == SymbolType.MultiplyDivide)
+            {
+                beta();
+                Sprim();
+            }
+        }
+
+
+        private void C()
+        {
             if (_currentSymbol.Type == SymbolType.LeftBracket)
             {
                 AcceptCharacter(SymbolType.LeftBracket);
-                X();
+                W();
                 AcceptCharacter(SymbolType.RightBracket);
-                if (_currentSymbol.Type == SymbolType.MathSymbol)
-                {
-                    AcceptCharacter(SymbolType.MathSymbol);
-                    X();
-                }
             }
             else
             {
                 AcceptCharacter(SymbolType.Data);
-                if (_currentSymbol.Type == SymbolType.MathSymbol)
-                {
-                    AcceptCharacter(SymbolType.MathSymbol);
-                    X();
-                }
             }
-            r--;
         }
+
         void AcceptCharacter(SymbolType expectedType)
         {
             Console.ForegroundColor = colors[((r>0)? r:0) % colors.Length];

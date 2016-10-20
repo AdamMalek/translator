@@ -72,7 +72,9 @@ namespace translator
                     return "int: " + symbol.Displayname;
                 case SymbolType.Float:
                     return "float: " + symbol.Displayname;
-                case SymbolType.MathSymbol:
+                case SymbolType.AddSubtract:
+                    return "math symbol: " + symbol.Displayname;
+                case SymbolType.MultiplyDivide:
                     return "math symbol: " + symbol.Displayname;
                 case SymbolType.LeftBracket:
                     return "left bracket: " + symbol.Displayname;
