@@ -107,7 +107,7 @@ namespace translator
                 }
                 Console.WriteLine("" + _currentSymbol.SymbolString + "");
                 Console.ForegroundColor = consoleColor;
-                throw new InvalidSyntaxException(_currentSymbol.Position, _currentSymbol.SymbolString, null);
+                throw new InvalidSyntaxException(_currentSymbol.Position, _currentSymbol.SymbolString, null,expectedType);
             }
         }
 
