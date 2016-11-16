@@ -63,7 +63,7 @@ namespace translator
                 switch (currentType)
                 {
                     case CharacterType.RightBracket:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray(),SymbolType.Number);
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol(")", i, SymbolType.RightBracket, distinct);
@@ -71,7 +71,7 @@ namespace translator
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.LeftBracket:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray(), SymbolType.Number);
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol("(", i, SymbolType.LeftBracket, distinct);
@@ -79,14 +79,14 @@ namespace translator
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.Whitespace:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray(), SymbolType.Number);
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         pastChar = ""; pastCharType = CharacterType.Empty;
                         symbol = ""; symbolType = SymbolType.Empty;
                         break;
                     case CharacterType.MathSymbol:
-                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                        if (pastCharType == CharacterType.Separator) throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray(), SymbolType.Number);
                         if (symbolType != SymbolType.Empty)
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                         AddSymbol(currentChar, i,(currentChar=="+"||currentChar=="-") ? SymbolType.AddSubtract : SymbolType.MultiplyDivide, distinct);
@@ -103,7 +103,7 @@ namespace translator
                         else if (symbolType == SymbolType.Integer || symbolType == SymbolType.Float)
                         {
                             if (pastCharType == CharacterType.Separator)
-                                throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray());
+                                throw new InvalidSyntaxException(i, currentChar, Symbols.ToArray(), SymbolType.Number);
                             AddSymbol(symbol, i - symbol.Length, symbolType, distinct);
                             symbol = currentChar; symbolType = SymbolType.Variable;
                             pastChar = currentChar; pastCharType = currentType;

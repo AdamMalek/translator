@@ -11,7 +11,7 @@ namespace translator
     {
         private Lexer _lexer;
         private Symbol _currentSymbol;
-
+        string res = "";
         public Analyzer(Lexer lexer)
         {
             _lexer = lexer;
@@ -23,6 +23,9 @@ namespace translator
             var consoleColor = Console.ForegroundColor;
             W();
             AcceptCharacter(SymbolType.EOF);
+            Console.WriteLine();
+            Console.WriteLine("Odwrotna notacja polska:");
+            Console.WriteLine(res);
             Console.ForegroundColor = consoleColor;
             return true;
         }
@@ -42,8 +45,10 @@ namespace translator
 
         private void alfa()
         {
+            var s = _currentSymbol.SymbolString;
             AcceptCharacter(SymbolType.AddSubtract);
             S();
+            res += s + " ";
         }
         private void Wprim()
         {
@@ -60,8 +65,10 @@ namespace translator
         }
         private void beta()
         {
+            var s = _currentSymbol.SymbolString;
             AcceptCharacter(SymbolType.MultiplyDivide);
             C();
+            res += s + " ";
         }
         private void Sprim()
         {
@@ -81,7 +88,9 @@ namespace translator
             }
             else
             {
+                var s = _currentSymbol.SymbolString;
                 AcceptCharacter(SymbolType.Data);
+                res += s + " ";
             }
         }
 
